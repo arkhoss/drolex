@@ -115,7 +115,7 @@ class Drolex:
             config = self.client.inspect_container(dockerID)
             image_config = self.client.inspect_image(config["Image"])
             config["Config"].update({"ImageEnv": image_config["Config"]["Env"], "ImagePorts": image_config["Config"].get("ExposedPorts", [])})
-            image_cmd = (image_config["Config"]["Entrypoint"] or []) + (image_config["Config"]["Cmd"] or [])
+            image_cmd = (image_config["Config"].get("Entrypoint") or []) + (image_config["Config"].get("Cmd") or [])
             config["Args"] = {"ImageCmd": image_cmd, "Cmd": config["Args"]}
             config["NetworkSettings"].update({"NetworkMode": config["HostConfig"]["NetworkMode"]})
             if self.debug:
